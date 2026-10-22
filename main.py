@@ -18,7 +18,7 @@ st.markdown("""
         color: #f8fafc;
     }
 
-    /* 상단 레오파드/레드 커튼 주름 연출 */
+    /* 상단 커튼 주름 연출 */
     .cinema-curtain-header {
         background: linear-gradient(180deg, #800a18 0%, #4a020a 70%, transparent 100%);
         border-bottom: 3px solid #d4af37;
@@ -29,7 +29,7 @@ st.markdown("""
         margin-bottom: 25px;
     }
 
-    /* 영화관 타이틀 (골드 네온 서체) */
+    /* 영화관 타이틀 */
     .cinema-main-title {
         font-family: 'Impact', 'Arial Black', sans-serif;
         font-size: 2.8rem;
@@ -67,3 +67,52 @@ st.markdown("""
     .screen-movie-title {
         font-size: 2.5rem;
         font-weight: 900;
+        color: #020617;
+        margin-top: 5px;
+        word-break: keep-all;
+    }
+
+    /* 위젯 카드 스타일 */
+    div[data-testid="stMetric"] {
+        background: rgba(45, 10, 15, 0.7);
+        border: 1px solid #7f1d1d;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    div[data-testid="stMetricLabel"] {
+        color: #fca5a5 !important;
+    }
+
+    div[data-testid="stMetricValue"] {
+        color: #ffffff !important;
+        font-weight: 800;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+API_URL = (
+    "https://www.kobis.or.kr/kobisopenapi/webservice/rest/"
+    "boxoffice/searchDailyBoxOfficeList.json"
+)
+
+# 서버 시간대와 관계없이 한국 시간(UTC+9) 기준으로 어제를 계산합니다.
+KST = datetime.timezone(datetime.timedelta(hours=9))
+today_kst = datetime.datetime.now(KST).date()
+yesterday = today_kst - datetime.timedelta(days=1)
+
+# 🎭 상단 극장 레드 커튼 헤더
+st.markdown("""
+    <div class="cinema-curtain-header">
+        <h1 class="cinema-main-title">🍿 CINEMA BOX OFFICE 🍿</h1>
+        <p style="color: #fef08a; margin-top: 8px; font-weight: 500;">
+            어제의 상영작 순위와 관객 수를 확인하세요
+        </p>
+    </div>
+""", unsafe_allow_html=True)
+
+selected_date = st.date_input(
+    "📅 상영 날짜 선택 (최대 어제까지 선택 가능)",
+    value=yesterday,
+    min_value=
